@@ -26,6 +26,6 @@ contract InteractionsTest is Test {
         WithdrawFundMe withdrawFundMe = new WithdrawFundMe();
         withdrawFundMe.withdrawFundMe(address(fundMe));
 
-        assertEq(address(fundMe).balance,0);
+        assertEq(address(fundMe).balance, 0);
     }
 }
