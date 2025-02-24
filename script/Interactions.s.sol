@@ -33,8 +33,7 @@ contract WithdrawFundMe is Script {
 
     function run() external {
         address recentDeployedAddress = DevOpsTools.get_most_recent_deployment("FundMe", block.chainid);
-        vm.startBroadcast();
+
         withdrawFundMe(recentDeployedAddress);
-        vm.stopBroadcast();
     }
 }
