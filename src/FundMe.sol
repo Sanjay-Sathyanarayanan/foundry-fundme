@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-// Note: The AggregatorV3Interface might be at a different location than what was in the video!
+
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import {PriceConverter} from "./PriceConverter.sol";
 
@@ -13,7 +13,7 @@ contract FundMe {
     mapping(address => uint256) private s_addressToAmountFunded; //Private variables are more gas-efficient than public ones.
     address[] private s_funders;
 
-    // Could we make this constant?  /* hint: no! We should make it immutable! */
+    
     address private immutable i_owner;
     uint256 public constant MINIMUM_USD = 5 * 10 ** 18;
 
@@ -26,13 +26,16 @@ contract FundMe {
 
     function fund() public payable {
         require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "You need to spend more ETH!");
+        //getConversionRate accepts two parameters, (Ethamount and priceFeed), 
+        //ethAmount is msg.value and priceFeed is s_priceFeed (using PriceConverter as a uint256 extension, we can call getConversionRate on msg.value),
+        // so the first parameter is msg.value and the second parameter is s_priceFeed. 
         // require(PriceConverter.getConversionRate(msg.value) >= MINIMUM_USD, "You need to spend more ETH!");
         s_addressToAmountFunded[msg.sender] += msg.value;
         s_funders.push(msg.sender);
     }
 
     function getVersion() public view returns (uint256) {
-        // AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        
         return s_priceFeed.version();
     }
 
@@ -48,6 +51,7 @@ contract FundMe {
             s_addressToAmountFunded[funder] = 0;
         }
         s_funders = new address[](0);
+        
         // // transfer
         // payable(msg.sender).transfer(address(this).balance);
 
